@@ -14,12 +14,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return $request->user()->getRoleNames();
+// });
 
-Route::group(['middleware' => ['cors', 'json.response']], function () {
-    Route::post('/login', 'Api\Auth\AuthController@login');
+Route::group(['middleware' => ['cors',]], function () {
+    Route::post('/login', 'Api\Auth\AuthController@login')->name('login');
+    Route::get('/profile', 'Api\Auth\AuthController@profile');
     Route::post('/register','Api\Auth\RegisterController@register');
     Route::post('password/email', 'Api\Auth\ForgotPasswordController@sendResetLinkEmail');
 
@@ -29,7 +30,7 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/logout', 'Api\Auth\AuthController@logout')->name('logout.api');
 });
 
-Route::group(['middleware' => ['cors', 'auth:api','json.response']], function(){
+Route::group(['middleware' => ['cors', 'auth:api',]], function(){
     Route::get('queris', 'Api\QureyController@getQuries');
     Route::post('queris-store', 'Api\QureyController@storeQuries');
     Route::post('query-response', 'Api\QureyController@responseQurey');

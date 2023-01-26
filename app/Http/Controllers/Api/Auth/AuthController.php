@@ -10,10 +10,15 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Auth\Events\Registered;
+use App\Http\Resources\UserResource;
 
 
 class AuthController extends Controller
 {
+
+        public function __construct(){
+            $this->middleware('auth:api')->only(['profile', 'logout']);
+        }
 
     public function login (Request $request)
     {
@@ -41,6 +46,14 @@ class AuthController extends Controller
             $response = ["message" =>'User or email id does not exist'];
             return response($response, 422);
         }
+    }
+
+    public function profile()
+    {
+        // dd(auth()->user());
+        return response()->json([
+        'user' => new UserResource(auth()->user())
+        ], 200);
     }
 
     public function logout (Request $request) {
