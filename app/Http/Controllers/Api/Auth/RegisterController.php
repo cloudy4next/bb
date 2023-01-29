@@ -15,13 +15,6 @@ use Illuminate\Support\Facades\Validator;
 class RegisterController extends Controller
 {
 
-
-    //  public function __construct()
-    //  {
-    //     $this->middleware('guest');
-    //  }
-
-
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(),
@@ -35,15 +28,19 @@ class RegisterController extends Controller
             return response(['errors'=>$validator->errors()->all()], 422);
         }
 
-        User::create([
+        $newUser = User::create([
         'name' => $request->name,
         'name' => $request->mobile_number,
         'email' => $request->email,
         'password' => Hash::make($request->password),
-        ]);
+        ])->id;
 
-        $response = ["message" =>'User Registered Sucessfully'];
-        return response($response, 200);
+
+        if (isset($request->roleName)) {
+            User::find($newUser)->assignRole($request->roleName);
+        }
+
+        return response(["message" =>'User Registered Sucessfully'], 200);
     }
 
 }

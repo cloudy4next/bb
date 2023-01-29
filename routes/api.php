@@ -34,5 +34,7 @@ Route::group(['middleware' => ['cors', 'auth:api',]], function(){
     Route::get('queris', 'Api\QureyController@getQuries');
     Route::post('queris-store', 'Api\QureyController@storeQuries');
     Route::post('query-response', 'Api\QureyController@responseQurey');
+    Route::post('create-role', 'Api\PermissionController@createRole');
+
 
     });
